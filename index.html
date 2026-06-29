@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aritzia Rewards</title>
+  
+  <link rel="icon" type="image/png" href="assets/ATZ.TO.D-65d521b4.png" />
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #000000; /* Dark fallback while video loads */
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      -webkit-font-smoothing: antialiased;
+      position: relative;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Fullscreen Background Video Setup */
+    .bg-video-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .bg-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Keeping layout above the video element */
+    .brand-logo-container, .headline, .btn-get, .instruction-card, .footer {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Enhanced Logo Layout: Enlarged, optimized bounds, and scaled to auto-crop internal padding */
+    .brand-logo-container {
+      margin-top: 15px;
+      margin-bottom: 65px;
+      width: 260px; 
+      height: 65px;  
+      overflow: hidden; 
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-logo {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; 
+      object-position: center; 
+      display: block;
+      transform: scale(1.4); /* Eliminates internal asset margins to maximize scale */
+    }
+
+    /* Updated Headline Typography to White */
+    .headline {
+      font-size: 2.2rem; 
+      font-weight: 400; 
+      text-align: center;
+      max-width: 600px;
+      line-height: 1.2;
+      margin-bottom: 40px;
+      letter-spacing: -0.01em;
+      color: #ffffff;
+    }
+
+    /* Transparent & White Styled CTA Button */
+    .btn-get {
+      display: inline-block;
+      background: transparent;
+      color: #ffffff;
+      border: 1px solid #ffffff;
+      text-decoration: none;
+      padding: 14px 40px;
+      border-radius: 0; 
+      font-weight: 500;
+      font-size: 0.85rem;
+      margin-bottom: 60px;
+      transition: opacity 0.2s ease, background 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .btn-get:hover {
+      opacity: 0.8;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Transparent Layout Container */
+    .instruction-card {
+      background: transparent;
+      width: 100%;
+      max-width: 500px;
+      padding: 40px 0;
+    }
+
+    /* White Border Process Box with Transparent Fill */
+    .process-box {
+      border: 1px solid #ffffff;
+      padding: 35px 30px;
+      margin-bottom: 40px;
+      background: transparent;
+    }
+
+    .process-box h2 {
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 30px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: #ffffff;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .step-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .circle-num {
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-right: 15px;
+      margin-top: 2px;
+      flex-shrink: 0;
+      color: #ffffff;
+    }
+
+    .step-desc {
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: #ffffff;
+      line-height: 1.4;
+    }
+
+    .qualify-section {
+      text-align: left;
+    }
+
+    /* Updated Eligibility Header & Body Text to White */
+    .qualify-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .qualify-text {
+      font-size: 0.85rem;
+      color: #ffffff;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+    .rating-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .rating-label { 
+      font-weight: 600; 
+      color: #ffffff; 
+      font-size: 0.7rem; 
+      text-transform: uppercase; 
+      letter-spacing: 0.05em;
+    }
+
+    .stars { display: flex; gap: 2px; }
+
+    /* Alpha Mask Logic: Solid background blocks with absolute true transparent star cutouts */
+    .star { 
+      background: #ffffff; 
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      /* Generates a true transparent window out of the background layer using data inline vectors */
+      -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z'/></svg>");
+      mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z'/></svg>");
+      -webkit-mask-size: contain;
+      mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+    }
+
+    /* Retains the distinct light grey backing for the structural unearned half point rating split */
+    .star-half { 
+      background: linear-gradient(90deg, #ffffff 50%, rgba(255, 255, 255, 0.25) 50%); 
+    }
+
+    .footer {
+      margin-top: 80px;
+      font-size: 0.65rem;
+      color: #cccccc;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      padding-top: 20px;
+      width: 100%;
+      max-width: 500px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fullscreen Video Layer Background Section -->
+  <div class="bg-video-container">
+    <video class="bg-video" autoplay loop muted playsinline>
+      <source src="assets/FREE STOCK VIDEO 4K Close up of a refreshing drink with bubbles interacting with ice and Lemon - TPMotion (1080p).mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <!-- Updated Native White-on-Transparent Branding Asset Path with Padding Crop Adjustment -->
+  <div class="brand-logo-container">
+    <img src="assets/aritzia-logo-black-and-white.png" alt="Aritzia" class="brand-logo">
+  </div>
+
+  <h1 class="headline">Get a $500 Aritzia Gift Card for completing our survey.</h1>
+
+  <a href="https://linkthem.net/aff_c?offer_id=1159&aff_id=13221&source=ari" class="btn-get">Get Started</a>
+
+  <div class="instruction-card">
+    
+    <div class="process-box">
+      <h2>The Process</h2>
+      
+      <div class="step-item">
+        <div class="circle-num">01</div>
+        <div class="step-desc">Complete the initial brand survey</div>
+      </div>
+
+      <div class="step-item">
+        <div class="circle-num">02</div>
+        <div class="step-desc">Confirm your contact and shipping details</div>
+      </div>
+
+      <div class="step-item">
+        <div class="circle-num">03</div>
+        <div class="step-desc">Complete the required deals</div>
+      </div>
+
+      <div class="step-item">
+        <div class="circle-num">04</div>
+        <div class="step-desc">Receive your gift card code via email</div>
+      </div>
+    </div>
+
+    <div class="qualify-section">
+      <h3 class="qualify-title">Eligibility</h3>
+      <p class="qualify-text">
+        To qualify for the $500 reward, participants must complete 3-5 featured deals. Each deal must be completed as per the requirements to unlock the final reward.
+      </p>
+
+      <div class="rating-container">
+        <span class="rating-label">Service Rating</span>
+        <div class="stars">
+          <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star star-half"></div>
+        </div>
+        <span style="font-weight:500; color:#ffffff; font-size: 0.75rem;">4.8 / 5</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="footer">Terms apply. Limited time offer.</p>
+
+</body>
+</html>
